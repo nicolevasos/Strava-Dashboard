@@ -20,17 +20,24 @@ A key feature is the activity heat map, which spatially represents the frequency
 
 ## 📅 Expected Timeline
 
-| Task                                      | May 19 | May 20 | Jun 6 | Jun 13 | Jun 20 | Jun 27 | Jul 4 | Jul 12 | Aug 29 |
-|-------------------------------------------|:------:|:------:|:-----:|:------:|:------:|:------:|:-----:|:-------:|:-------:|
-| Data exploration & defining project scope | ██████ |        |       |        |        |        |       |         |         |
-| Data extraction & spatial exploration     |        | ██████ |       |        |        |        |       |         |         |
-| 1st Jupyter Notebook version               |        |        | █████ |        |        |        |       |         |         |
-| Integrate spatial data processing          |        |        |       | ██████ |        |        |       |         |         |
-| Complete Jupyter Notebook                  |        |        |       |        | ██████ |        |       |         |         |
-| First dashboard version                     |        |        |       |        |        | ██████ |       |         |         |
-| Testing with diverse inputs                 |        |        |       |        |        |        | █████ |         |         |
-| Geo-statistics application                   |        |        |       |        |        |        |       | ██████  |         |
-| Final product completion                     |        |        |       |        |        |        |       |         | ██████  |
+
+| Task Category             | Subtask                                         | May     | June    | July    | August  | Deadline        |
+|--------------------------|------------------------------------------------|:-------:|:-------:|:-------:|:-------:|-----------------|
+| **1. Project Planning**    | Data exploration & define project scope        | ██████  |         |         |         | **19th May**    |
+|                           | Finalize team roles and responsibilities       | ██████  |         |         |         | **19th May**    |
+| **2. Data Acquisition**    | Strava API data extraction setup                | ██████  |         |         |         | **20th May**    |
+|                           | Spatial data exploration                         | ██████  |         |         |         | **20th May**    |
+| **3. Data Processing**     | Initial Jupyter Notebook: extraction & cleaning |         | ██████  |         |         | **6th June**    |
+|                           | Spatial data integration & visualization        |         | ██████  |         |         | **13th June**   |
+|                           | Finalize Jupyter Notebook preprocessing         |         | ██████  |         |         | **20th June**   |
+| **4. Dashboard Development** | Initial dashboard layout and structure          |         | ██████  |         |         | **27th June**   |
+|                           | Implement interactive filters (type, date)     |         |         | ██████  |         | **4th July**    |
+|                           | Add activity heat map and spatial visualizations |         |         | ██████  |         | **4th July**    |
+| **5. Testing & Validation** | Testing with diverse datasets and filters       |         |         | ██████  |         | **12th July**   |
+|                           | Apply geo-statistics and performance metrics    |         |         | ██████  |         | **12th July**   |
+| **6. Finalization**        | Refine dashboard based on feedback               |         |         |         | ██████  | **29th August** |
+|                           | Complete documentation and deployment            |         |         |         | ██████  | **29th August** |
+
 
 
 ## 🛠️ Technologies and Tools
