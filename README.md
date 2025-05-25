@@ -41,10 +41,11 @@ A key feature is the activity heat map, which spatially represents the frequency
 
 
 ## 🛠️ Technologies and Tools
-- Python (Jupyter Notebook)
 - Strava API
+- JavaScript
+- Python (Jupyter Notebook)
 - Geo-statistical libraries (e.g., GeoPandas, Folium)
-- Data visualization tools (e.g., Matplotlib, Seaborn, Plotly)
+- Data visualization tools (e.g., LeafLet, MappBox, Carto, Matplotlib, Seaborn, Plotly)
 - Web dashboard frameworks (to be decided)
 
 
