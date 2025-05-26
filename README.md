@@ -1,5 +1,5 @@
 # Strava Web-Based Dashboard for Spatial and Performance Analysis
-### Practtice Software Develpment (Python) - Final Project
+### Practice Software Development (Python) - Final Project
 
 ## 📌 Project Description
 This project focuses on designing and implementing a personalised web-app dashboard using Jupyter Notebook, which leverages the Strava API to extract and visualise physical activity data. The dashboard offers an interactive interface where users can filter analysed activities by type (e.g., hike, run, bike) and date.
@@ -11,7 +11,7 @@ A key feature is the activity heat map, which spatially represents the frequency
 | Team Member               | Responsibilities                                                                                   | Expected Hours |
 |---------------------------|--------------------------------------------------------------------------------------------------|----------------|
 | Angelica Maria Moreno  | Applying statistics and geo-statistics: writing functions to visualize workout preferences, performance, and speed evolution. | 40-50          |
-| Arunima                   | Applying geo-statistics [details to be expanded]                                                 | 40-50          |
+| Arunima                   | Conducting hotspot analysis (most likely using Getis-Ord statistics) to identify clusters of high activity frequency or performance, supporting the generation of spatial insights through heatmaps. As a bonus, maybe contributing to a route optimization feature by integrating past performance data + terrain and network information to suggest suitable future routes                                                 | 40-50          |
 | Emese                     | Data preparation for dashboard visualization.                                                               | 40-50          |
 | Maria Anna Fedyszyn  | Data preparation for heat map and visualization.                                                | 40-50          |
 | Nicole Salazar-Cuellar                   | Initializing project structure, setting up core package code, and designing initial dashboard layout. | 40-50          |
