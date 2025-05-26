@@ -12,7 +12,7 @@ A key feature is the activity heat map, which spatially represents the frequency
 |---------------------------|--------------------------------------------------------------------------------------------------|----------------|
 | Angelica Maria Moreno  | Applying statistics and geo-statistics: writing functions to visualize workout preferences, performance, and speed evolution. | 40-50          |
 | Arunima                   | Applying geo-statistics [details to be expanded]                                                 | 40-50          |
-| Emese                     | [Responsibilities to be expanded]                                                                | 40-50          |
+| Emese                     | Data preparation for dashboard visualization.                                                               | 40-50          |
 | Maria Anna Fedyszyn  | Data preparation for heat map and visualization.                                                | 40-50          |
 | Nicole Salazar-Cuellar                   | Initializing project structure, setting up core package code, and designing initial dashboard layout. | 40-50          |
 
