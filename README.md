@@ -10,11 +10,11 @@ A key feature is the activity heat map, which spatially represents the frequency
 
 | Team Member               | Responsibilities                                                                                   | Expected Hours |
 |---------------------------|--------------------------------------------------------------------------------------------------|----------------|
-| Angelica Maria Moreno  | Applying statistics and geo-statistics: writing functions to visualize workout preferences, performance, and speed evolution. | 40-50          |
-| Arunima                   | Conducting hotspot analysis (most likely using Getis-Ord statistics) to identify clusters of high activity frequency or performance, supporting the generation of spatial insights through heatmaps. As a bonus, maybe contributing to a route optimization feature by integrating past performance data + terrain and network information to suggest suitable future routes                                                 | 40-50          |
-| Emese                     | Data preparation for dashboard visualization.                                                               | 40-50          |
-| Maria Anna Fedyszyn  | Data preparation for heat map and visualization.                                                | 40-50          |
-| Nicole Salazar-Cuellar                   | Initializing project structure, setting up core package code, and designing initial dashboard layout. | 40-50          |
+| Angelica Maria Moreno  | Applying statistics and geo-statistics: writing functions to visualise workout preferences, performance, and speed evolution. | 40-50          |
+| Arunima Sen                   | Conducting hotspot analysis (most likely using Getis-Ord statistics) to identify clusters of high activity frequency or performance, supporting the generation of spatial insights through heatmaps. As a bonus, maybe contributing to a route optimisation feature by integrating past performance data + terrain and network information to suggest suitable future routes                                                 | 40-50          |
+| Emese Gojdar                     | Data preparation for dashboard visualisation.                                                               | 40-50          |
+| Maria Anna Fedyszyn  | Data preparation for heat map and visualisation.                                                | 40-50          |
+| Nicole Salazar-Cuellar                   | Initialising project structure, setting up core package code, and designing initial dashboard layout. | 40-50          |
 
 *Note: Task hours are approximate and may be redistributed depending on project needs.*
 
@@ -45,7 +45,5 @@ A key feature is the activity heat map, which spatially represents the frequency
 - JavaScript
 - Python (Jupyter Notebook)
 - Geo-statistical libraries (e.g., GeoPandas, Folium)
-- Data visualization tools (e.g., LeafLet, MappBox, Carto, Matplotlib, Seaborn, Plotly)
+- Data visualisation tools (e.g., LeafLet, MappBox, Carto, Matplotlib, Seaborn, Plotly)
 - Web dashboard frameworks (to be decided)
-
-
