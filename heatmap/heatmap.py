@@ -4,10 +4,315 @@ import numpy as np
 import json
 import math
 from datetime import datetime, timedelta
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Optional
 import time
 
+# Token management functions
+def refresh_strava_token(client_id: str, client_secret: str, refresh_token: str) -> Optional[Dict]:
+    """Get a fresh access token from Strava"""
+    url = "https://www.strava.com/oauth/token"
+    data = {
+        'client_id': 'XXX',
+        'client_secret': 'XXXXX',
+        'refresh_token': 'XXXXX',
+        'grant_type': 'refresh_token'
+    }
+    
+    try:
+        response = requests.post(url, data=data)
+        response.raise_for_status()
+        token_data = response.json()
+        
+        return {
+            'access_token': token_data['access_token'],
+            'refresh_token': token_data['refresh_token'],
+            'expires_at': datetime.now() + timedelta(seconds=token_data['expires_in'])
+        }
+    except requests.RequestException as e:
+        print(f"Token refresh failed: {e}")
+        return None
 
+def get_strava_headers(access_token: str) -> Dict[str, str]:
+    """Get headers for Strava API requests"""
+    return {'Authorization': f'Bearer {access_token}'}
+
+# Data fetching functions
+def fetch_activities(access_token: str, limit: int = 200) -> List[Dict]:
+    """Fetch Strava activities"""
+    url = "https://www.strava.com/api/v3/athlete/activities"
+    headers = get_strava_headers(access_token)
+    
+    activities = []
+    page = 1
+    per_page = 200
+    
+    while len(activities) < limit:
+        params = {
+            'page': page,
+            'per_page': min(per_page, limit - len(activities))
+        }
+        
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            batch = response.json()
+            
+            if not batch:
+                break
+                
+            activities.extend(batch)
+            print(f"Fetched {len(batch)} activities (page {page})")
+            
+            if len(batch) < per_page:
+                break
+                
+            page += 1
+            time.sleep(0.1)
+            
+        except requests.RequestException as e:
+            print(f"Error fetching activities: {e}")
+            break
+    
+    return activities[:limit]
+
+def fetch_activity_gps(access_token: str, activity_id: int) -> Optional[List]:
+    """Get GPS points for a single activity"""
+    url = f"https://www.strava.com/api/v3/activities/{activity_id}/streams"
+    headers = get_strava_headers(access_token)
+    params = {'keys': 'latlng', 'key_by_type': 'true'}
+    
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        if 'latlng' in data:
+            return data['latlng']['data']
+        return None
+        
+    except requests.RequestException:
+        return None
+
+def extract_all_gps_points(access_token: str, activities: List[Dict]) -> pd.DataFrame:
+    """Extract GPS points from all activities"""
+    points = []
+    
+    for i, activity in enumerate(activities):
+        activity_id = activity['id']
+        activity_type = activity.get('type', 'Unknown')
+        
+        print(f"Processing {i+1}/{len(activities)}: {activity_type}")
+        
+        gps_data = fetch_activity_gps(access_token, activity_id)
+        if gps_data:
+            for lat, lng in gps_data:
+                points.append({
+                    'lat': lat,
+                    'lng': lng,
+                    'activity_id': activity_id,
+                    'activity_type': activity_type
+                })
+        
+        time.sleep(0.1)
+    
+    df = pd.DataFrame(points)
+    print(f"Total GPS points: {len(df)}")
+    return df
+
+# Grid calculation functions
+def degrees_to_meters(lat: float) -> Dict[str, float]:
+    """Convert degree distances to meters at given latitude"""
+    lat_to_m = 111000  # meters per degree latitude
+    lng_to_m = 111000 * math.cos(math.radians(lat))
+    return {'lat': lat_to_m, 'lng': lng_to_m}
+
+def create_grid(bounds: Dict[str, float], resolution_m: float = 1.0) -> Dict:
+    """Create grid arrays for given bounds and resolution"""
+    lat_center = (bounds['north'] + bounds['south']) / 2
+    meters_per_degree = degrees_to_meters(lat_center)
+    
+    lat_res = resolution_m / meters_per_degree['lat']
+    lng_res = resolution_m / meters_per_degree['lng']
+    
+    lat_grid = np.arange(bounds['south'], bounds['north'] + lat_res, lat_res)
+    lng_grid = np.arange(bounds['west'], bounds['east'] + lng_res, lng_res)
+    
+    return {
+        'lat_grid': lat_grid,
+        'lng_grid': lng_grid,
+        'lat_res': lat_res,
+        'lng_res': lng_res
+    }
+
+def filter_points_to_bounds(df: pd.DataFrame, bounds: Dict[str, float]) -> pd.DataFrame:
+    """Filter GPS points to map bounds"""
+    mask = (
+        (df['lat'] >= bounds['south']) & 
+        (df['lat'] <= bounds['north']) &
+        (df['lng'] >= bounds['west']) & 
+        (df['lng'] <= bounds['east'])
+    )
+    return df[mask].copy()
+
+def calculate_frequency_matrix(df: pd.DataFrame, grid: Dict) -> np.ndarray:
+    """Calculate frequency of points in grid cells"""
+    lat_indices = np.digitize(df['lat'], grid['lat_grid']) - 1
+    lng_indices = np.digitize(df['lng'], grid['lng_grid']) - 1
+    
+    frequency_matrix = np.zeros((len(grid['lat_grid']), len(grid['lng_grid'])))
+    
+    for lat_idx, lng_idx in zip(lat_indices, lng_indices):
+        if 0 <= lat_idx < len(grid['lat_grid']) and 0 <= lng_idx < len(grid['lng_grid']):
+            frequency_matrix[lat_idx, lng_idx] += 1
+    
+    return frequency_matrix
+
+# GeoJSON output functions
+def create_cell_polygon(lat: float, lng: float, lat_res: float, lng_res: float) -> List[List[float]]:
+    """Create polygon coordinates for a grid cell"""
+    half_lat = lat_res / 2
+    half_lng = lng_res / 2
+    
+    return [[
+        [lng - half_lng, lat - half_lat],
+        [lng + half_lng, lat - half_lat],
+        [lng + half_lng, lat + half_lat],
+        [lng - half_lng, lat + half_lat],
+        [lng - half_lng, lat - half_lat]
+    ]]
+
+def frequency_matrix_to_geojson(frequency_matrix: np.ndarray, grid: Dict) -> Dict:
+    """Convert frequency matrix to GeoJSON"""
+    features = []
+    max_freq = frequency_matrix.max()
+    
+    if max_freq == 0:
+        return {"type": "FeatureCollection", "features": []}
+    
+    for i in range(len(grid['lat_grid'])):
+        for j in range(len(grid['lng_grid'])):
+            freq = frequency_matrix[i, j]
+            if freq > 0:
+                lat = grid['lat_grid'][i]
+                lng = grid['lng_grid'][j]
+                intensity = freq / max_freq
+                
+                feature = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": create_cell_polygon(lat, lng, grid['lat_res'], grid['lng_res'])
+                    },
+                    "properties": {
+                        "frequency": int(freq),
+                        "intensity": round(intensity, 3)
+                    }
+                }
+                features.append(feature)
+    
+    return {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+# Main function
+def generate_strava_heatmap_geojson(client_id: str, client_secret: str, refresh_token: str, 
+                                  bounds: Dict[str, float], activity_limit: int = 200) -> Dict:
+    """Generate Strava heatmap as GeoJSON"""
+    print("=== Generating Strava Heatmap ===")
+    
+    # Get access token
+    token_data = refresh_strava_token(client_id, client_secret, refresh_token)
+    if not token_data:
+        return {'error': 'Failed to get access token'}
+    
+    access_token = token_data['access_token']
+    
+    # Fetch activities
+    activities = fetch_activities(access_token, activity_limit)
+    if not activities:
+        return {'error': 'No activities found'}
+    
+    # Extract GPS points
+    gps_points = extract_all_gps_points(access_token, activities)
+    if gps_points.empty:
+        return {'error': 'No GPS data found'}
+    
+    # Filter to bounds
+    filtered_points = filter_points_to_bounds(gps_points, bounds)
+    if filtered_points.empty:
+        return {'error': 'No GPS points in specified bounds'}
+    
+    print(f"Points in bounds: {len(filtered_points)}")
+    
+    # Create grid and calculate frequencies
+    grid = create_grid(bounds)
+    frequency_matrix = calculate_frequency_matrix(filtered_points, grid)
+    
+    # Convert to GeoJSON
+    geojson = frequency_matrix_to_geojson(frequency_matrix, grid)
+    
+    # Add metadata
+    stats = {
+        'total_points': len(filtered_points),
+        'grid_cells': len(geojson['features']),
+        'max_frequency': int(frequency_matrix.max()),
+        'bounds': bounds
+    }
+    
+    print(f"Generated {len(geojson['features'])} grid cells")
+    print("=== Complete ===")
+    
+    return {
+        'geojson': geojson,
+        'stats': stats
+    }
+
+# Example usage
+def example_usage():
+    """Example of how to use the heatmap generator"""
+    
+    # Your Strava API credentials
+    credentials = {
+        'client_id': 'YOUR_CLIENT_ID',
+        'client_secret': 'YOUR_CLIENT_SECRET',
+        'refresh_token': 'YOUR_REFRESH_TOKEN'
+    }
+    
+    # Define bounds (Salzburg area)
+    salzburg_bounds = {
+        'north': 47.8300,
+        'south': 47.7800,
+        'east': 13.1200,
+        'west': 13.0000
+    }
+    
+    # Generate heatmap
+    result = generate_strava_heatmap_geojson(
+        **credentials,
+        bounds=salzburg_bounds,
+        activity_limit=50
+    )
+    
+    if 'error' in result:
+        print(f"Error: {result['error']}")
+        return
+    
+    # Save GeoJSON
+    with open('strava_heatmap.geojson', 'w') as f:
+        json.dump(result['geojson'], f, indent=2)
+    
+    # Print stats
+    stats = result['stats']
+    print(f"\nStats:")
+    print(f"Total points: {stats['total_points']}")
+    print(f"Grid cells: {stats['grid_cells']}")
+    print(f"Max frequency: {stats['max_frequency']}")
+    
+    return result
+
+if __name__ == "__main__":
+    example_usage()
 
 class StravaHeatmapGenerator:
     """
@@ -300,7 +605,7 @@ def example_usage():
     print(f"Grid cells with data: {stats['grid_cells']}")
     print(f"Max frequency per cell: {stats['max_frequency']}")
     
-    # Save to file for web use
+    # Save to file
     with open('heatmap_data.json', 'w') as f:
         json.dump(result['heatmap_data'], f)
     
