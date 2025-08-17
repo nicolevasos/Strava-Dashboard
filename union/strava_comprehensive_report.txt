@@ -1,0 +1,84 @@
+============================================================
+COMPREHENSIVE STRAVA GEOSTATISTICAL ANALYSIS
+============================================================
+Generated: 2025-08-17 14:28:30
+
+BASIC STATISTICS
+------------------------------
+Total activities: 124
+Analysis period: 965 days
+Average activities per day: 0.1
+
+Activity breakdown:
+  • Walk: 55 (44.4%)
+  • Ride: 55 (44.4%)
+  • Snowboard: 5 (4.0%)
+  • Hike: 5 (4.0%)
+  • Run: 2 (1.6%)
+
+PERFORMANCE METRICS
+------------------------------
+Total distance: 2,757.1 km
+Average distance: 22.2 km
+Average speed: 9.4 km/h
+Total elevation gain: 40,611 m
+
+SPATIAL HOTSPOT ANALYSIS
+------------------------------
+
+Analysis of intensity_score:
+  • Hotspots: 3
+  • Coldspots: 0
+  • High-high clusters: 42
+  • Low-low clusters: 19
+  • Spatial outliers: 13
+
+Analysis of speed_kmh:
+  • Hotspots: 6
+  • Coldspots: 0
+  • High-high clusters: 39
+  • Low-low clusters: 30
+  • Spatial outliers: 12
+
+Analysis of distance_km:
+  • Hotspots: 9
+  • Coldspots: 0
+  • High-high clusters: 5
+  • Low-low clusters: 33
+  • Spatial outliers: 9
+
+SPATIAL CLUSTERING
+------------------------------
+Number of clusters: 7
+
+Cluster 0:
+  • Size: 3 activities
+  • Avg distance: 65.4 km
+  • Avg speed: 8.4 km/h
+  • Dominant activity: Walk
+
+Cluster 1:
+  • Size: 39 activities
+  • Avg distance: 33.3 km
+  • Avg speed: 13.4 km/h
+  • Dominant activity: Ride
+
+Cluster 2:
+  • Size: 3 activities
+  • Avg distance: 6.3 km
+  • Avg speed: 7.6 km/h
+  • Dominant activity: Walk
+
+Cluster 3:
+  • Size: 3 activities
+  • Avg distance: 9.0 km
+  • Avg speed: 3.7 km/h
+  • Dominant activity: Walk
+
+Cluster 4:
+  • Size: 14 activities
+  • Avg distance: 26.4 km
+  • Avg speed: 14.9 km/h
+  • Dominant activity: Ride
+
+============================================================
