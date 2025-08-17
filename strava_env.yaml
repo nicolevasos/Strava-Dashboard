@@ -1,0 +1,17 @@
+name: strava_analysis
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - pandas
+  - geopandas
+  - matplotlib
+  - seaborn
+  - shapely
+  - ipykernel
+  - pip
+  - pip:
+      - folium
+      - branca
+      - polyline

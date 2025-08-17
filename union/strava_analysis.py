@@ -1374,3 +1374,145 @@ def main_analysis(csv_path):
         import traceback
         traceback.print_exc()
         return None, None, None
+
+
+## Heat map (speed and frequency) related functions
+def decode_polyline(polyline_str):
+    """
+    Decode a polyline string into a list of [lat, lng] coordinates
+    """
+    if pd.isna(polyline_str) or polyline_str == '':
+        return []
+    
+    try:
+        coordinates = polyline.decode(polyline_str)
+        return coordinates
+    except Exception as e:
+        print(f"Error decoding polyline: {e}")
+        return []
+
+def create_heatmap_data(df, polyline_column='map.summary_polyline', speed_column='average_speed'):
+    """
+    Extract coordinates for frequency and speed-based heatmaps
+    """
+    freq_coords = []
+    speed_coords = []
+    
+    valid_count = 0
+    for idx, row in df.iterrows():
+        poly_str = row[polyline_column]
+        speed = row.get(speed_column, 0.0)
+        
+        if pd.notna(poly_str) and poly_str != '':
+            coords = decode_polyline(poly_str)
+            if coords:
+                freq_coords.extend(coords)
+                if speed > 0:
+                    # Assign speed as weight for all points in this polyline
+                    speed_coords.extend([[lat, lng, speed] for lat, lng in coords])
+                valid_count += 1
+                
+        if (idx + 1) % 100 == 0:
+            print(f"Processed {idx + 1} activities...")
+    
+    print(f"Processed {valid_count} activities with valid polylines")
+    print(f"Total frequency coordinates: {len(freq_coords)}")
+    print(f"Total speed coordinates: {len(speed_coords)}")
+    
+    return freq_coords, speed_coords
+
+def create_base_map(center, zoom):
+    """
+    Create base map with properly named tile layers
+    """
+    m = folium.Map(location=center, zoom_start=zoom, tiles=None)
+    
+    # Add base map layers with proper names
+    folium.TileLayer('OpenStreetMap', name='Open Street Map').add_to(m)
+    folium.TileLayer('CartoDB positron', name='CartoDB Positron', attr='Map tiles by CartoDB').add_to(m)
+    
+    return m
+
+def add_heatmap_layers(map_obj, freq_coords, speed_coords):
+    """
+    Add frequency and speed heatmap layers to the map
+    """
+    # Frequency heatmap - RED GRADIENT
+    if freq_coords:
+        HeatMap(freq_coords,
+                name='Frequency Heatmap',
+                min_opacity=0.2,
+                max_zoom=18,
+                radius=6,
+                blur=10,
+                gradient={0.0: '#000000', 0.5: '#880000', 1.0: '#ff0000'}
+               ).add_to(map_obj)
+    
+    # Speed heatmap - BLUE GRADIENT  
+    if speed_coords:
+        HeatMap(speed_coords,
+                name='Speed Heatmap',
+                min_opacity=0.3,
+                max_zoom=18,
+                radius=6,
+                blur=10,
+                use_local_extrema=False,
+                gradient={0.0: '#000000', 0.5: '#000088', 1.0: '#0000ff'}
+               ).add_to(map_obj)
+    
+    return map_obj
+
+def add_legend(map_obj):
+    """
+    Add legend to the map
+    """
+    legend_html = '''
+    <div style="position: fixed; 
+                bottom: 20px; right: 20px; width: 160px; height: 160px; 
+                background-color: white; border:2px solid grey; z-index:9999; 
+                font-size:12px; padding: 10px">
+    <p><b>Legend</b></p>
+    <p><b>Frequency:</b><br>
+    <span style="background: linear-gradient(to right, #000000, #ff0000); width: 70px; height: 10px; display: inline-block;"></span><br>
+    Low → High</p>
+    <p><b>Speed:</b><br>
+    <span style="background: linear-gradient(to right, #000000, #0000ff); width: 70px; height: 10px; display: inline-block;"></span><br>
+    Slow → Fast</p>
+    </div>
+    '''
+    map_obj.get_root().html.add_child(folium.Element(legend_html))
+    return map_obj
+
+def add_layer_control(map_obj):
+    """
+    Add layer control to toggle between layers
+    """
+    folium.LayerControl().add_to(map_obj)
+    return map_obj
+
+def create_heatmap(csv_file, polyline_column, speed_column, center, zoom, output_file):
+    """
+    Main function to create the complete heatmap
+    """
+    # Load data 
+    print("Loading CSV...")
+    df = pd.read_csv(csv_file)
+    print(f"Loaded {len(df)} activities from CSV")
+    
+    # Process coordinates
+    freq_coords, speed_coords = create_heatmap_data(df, polyline_column, speed_column)
+    
+    if not freq_coords and not speed_coords:
+        print("No valid coordinates found. Check your CSV file and columns.")
+        return None
+    
+    # Create map with all components
+    m = create_base_map(center, zoom)
+    m = add_heatmap_layers(m, freq_coords, speed_coords)
+    m = add_legend(m)
+    m = add_layer_control(m)
+    
+    # Save map
+    m.save(output_file)
+    print(f"Heatmap saved as: {output_file}")
+    return m
