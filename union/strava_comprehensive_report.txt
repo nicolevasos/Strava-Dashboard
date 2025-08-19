@@ -1,7 +1,7 @@
 ============================================================
 COMPREHENSIVE STRAVA GEOSTATISTICAL ANALYSIS
 ============================================================
-Generated: 2025-08-17 14:28:30
+Generated: 2025-08-19 11:34:28
 
 BASIC STATISTICS
 ------------------------------
@@ -27,24 +27,24 @@ SPATIAL HOTSPOT ANALYSIS
 ------------------------------
 
 Analysis of intensity_score:
-  • Hotspots: 3
+  • Hotspots: 4
   • Coldspots: 0
   • High-high clusters: 42
   • Low-low clusters: 19
-  • Spatial outliers: 13
+  • Spatial outliers: 10
 
 Analysis of speed_kmh:
-  • Hotspots: 6
+  • Hotspots: 0
   • Coldspots: 0
-  • High-high clusters: 39
+  • High-high clusters: 42
   • Low-low clusters: 30
   • Spatial outliers: 12
 
 Analysis of distance_km:
-  • Hotspots: 9
+  • Hotspots: 2
   • Coldspots: 0
-  • High-high clusters: 5
-  • Low-low clusters: 33
+  • High-high clusters: 6
+  • Low-low clusters: 35
   • Spatial outliers: 9
 
 SPATIAL CLUSTERING

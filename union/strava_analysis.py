@@ -391,7 +391,7 @@ def spatial_clustering_analysis(gdf, eps_km=1.5, min_samples=3):
 
 # VISUALIZATION FUNCTIONS
 
-def create_activity_locations_plot(gdf, save_path='activity_locations.png'):
+def create_activity_locations_plot(gdf, save_path='outputs/activity_locations.png'):
     """Create activity locations plot with intensity on basemap"""
 
     gdf_proj = gdf.to_crs('EPSG:3857')
@@ -421,7 +421,7 @@ def create_activity_locations_plot(gdf, save_path='activity_locations.png'):
     plt.savefig(save_path, dpi=200, bbox_inches='tight')
     plt.show()
 
-def create_hotspots_plot(hotspot_results, save_path='spatial_hotspots.png'):
+def create_hotspots_plot(hotspot_results, save_path='outputs/spatial_hotspots.png'):
     """Create hotspots analysis plot with basemap"""
 
     if not hotspot_results or 'intensity_score' not in hotspot_results:
@@ -472,7 +472,7 @@ def create_hotspots_plot(hotspot_results, save_path='spatial_hotspots.png'):
     plt.show()
 
 
-def create_performance_distributions_plot(gdf, save_path='performance_distributions.png'):
+def create_performance_distributions_plot(gdf, save_path='outputs/performance_distributions.png'):
     """Create performance distribution plots"""
 
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
@@ -512,7 +512,7 @@ def create_performance_distributions_plot(gdf, save_path='performance_distributi
     plt.show()
 
 
-def create_temporal_patterns_plot(gdf, save_path='temporal_patterns.png'):
+def create_temporal_patterns_plot(gdf, save_path='outputs/temporal_patterns.png'):
     """Create temporal patterns plot"""
     if 'hour' not in gdf.columns:
         print("   no temporal data available")
@@ -568,7 +568,7 @@ def create_temporal_patterns_plot(gdf, save_path='temporal_patterns.png'):
     plt.show()
 
 
-def create_correlation_heatmap(gdf, save_path='correlation_heatmap.png'):
+def create_correlation_heatmap(gdf, save_path='outputs/correlation_heatmap.png'):
     """Create correlation heatmap"""
 
     numeric_cols = ['distance_km', 'speed_kmh', 'total_elevation_gain', 'intensity_score', 'performance_score']
@@ -590,7 +590,7 @@ def create_correlation_heatmap(gdf, save_path='correlation_heatmap.png'):
     plt.savefig(save_path, dpi=200, bbox_inches='tight')
     plt.show()
 
-def create_distance_speed_scatter(gdf, save_path='distance_speed_scatter.png'):
+def create_distance_speed_scatter(gdf, save_path='outputs/distance_speed_scatter.png'):
     """Create distance vs speed scatter plot"""
 
     fig, ax = plt.subplots(figsize=(12, 8))
@@ -612,7 +612,7 @@ def create_distance_speed_scatter(gdf, save_path='distance_speed_scatter.png'):
     plt.show()
 
 
-def create_clusters_plot(gdf, save_path='spatial_clusters.png'):
+def create_clusters_plot(gdf, save_path='outputs/spatial_clusters.png'):
     """Create spatial clusters plot with basemap"""
     if 'cluster' not in gdf.columns:
         print("   no cluster data available")
@@ -656,7 +656,7 @@ def create_clusters_plot(gdf, save_path='spatial_clusters.png'):
     plt.show()
 
 
-def create_interactive_map(gdf, hotspot_results=None, save_path='strava_interactive_map.html'):
+def create_interactive_map(gdf, hotspot_results=None, save_path='outputs/strava_interactive_map.html'):
     """Create comprehensive interactive map"""
 
     center_lat = gdf['start_lat'].median()
@@ -800,7 +800,7 @@ def create_interactive_map(gdf, hotspot_results=None, save_path='strava_interact
 
     return m
 
-def create_dashboard_html(gdf, cluster_df=None, save_path='strava_dashboard.html'):
+def create_dashboard_html(gdf, cluster_df=None, save_path='outputs/strava_dashboard_aru.html'):
     """Create a beautiful haha HTML dashboard with all analysis results"""
 
     # summary statistics
@@ -1344,7 +1344,7 @@ def main_analysis(csv_path):
 
         # 7. Export results
         print("\nExporting results as csv")
-        gdf.to_csv('strava_enhanced_results.csv', index=False)
+        gdf.to_csv('outputs/strava_enhanced_results.csv', index=False)
 
         if hotspot_results and available_attributes:
             primary_attr = available_attributes[0]
@@ -1352,7 +1352,7 @@ def main_analysis(csv_path):
                 hotspot_results[primary_attr][f'spatial_type_{primary_attr}'] != 'not_significant'
             ]
             if len(significant_patterns) > 0:
-                significant_patterns.to_csv('strava_significant_patterns.csv', index=False)
+                significant_patterns.to_csv('outputs/strava_significant_patterns.csv', index=False)
 
         # 8. Display results
         print("\nAnalysis complete!")
@@ -1364,7 +1364,7 @@ def main_analysis(csv_path):
         print("• strava_enhanced_results.csv (enhanced dataset)")
 
         # interactive map
-        display_html_map_simple('strava_interactive_map.html')
+        display_html_map_simple('outputs/strava_interactive_map.html')
         print("   open this file in your browser !")
 
         return gdf, hotspot_results, cluster_df
