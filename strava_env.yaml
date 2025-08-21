@@ -3,15 +3,18 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python
-  - pandas
+  - dash
   - geopandas
+  - ipykernel
   - matplotlib
+  - numpy
+  - pandas
+  - plotly
+  - python
   - seaborn
   - shapely
-  - ipykernel
   - pip
   - pip:
-      - folium
       - branca
+      - folium
       - polyline
