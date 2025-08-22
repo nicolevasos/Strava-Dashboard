@@ -43,7 +43,7 @@ Strava-Dashboard/
 Clone the repository:
 ```bash
 git clone https://github.com/nicolevasos/Strava-Dashboard.git
-cd Strava-Dashboard
+cd Strava-Dashboard/Union
 ```
 
 Create and activate the conda environment:
