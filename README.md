@@ -26,6 +26,7 @@ Strava-Dashboard/
 │   ├── drafts/                  # Legacy dashboard elements and inputs
 │   ├── strava_env.yaml          # Environment configuration
 │   └── v1/                      # Current implementation (union v1)
+│       ├── strava-api/          # Strava API scripts and resources
 │       ├── assets/              # Static files and resources
 │       ├── data/                # Activity data and processed files
 │       ├── main.ipynb           # Core dashboard notebook
