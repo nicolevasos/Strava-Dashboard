@@ -59,7 +59,7 @@ conda activate strava_env
 1. Run the main notebook to process data and generate the dashboard
 2. View the dashboard using one of the following methods:
    - **Notebook output:** View visualisations directly in the Jupyter Notebook canvas
-   - **Local server:** Access the interactive dashboard at `http://127.0.0.1:8050/`
+   - **Local server (recommended):** Access the interactive dashboard at `http://127.0.0.1:8050/`
 
 The dashboard allows users to filter activities by type and date range, explore spatial patterns through heat maps, and analyse performance trends over time.
 
