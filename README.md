@@ -77,7 +77,7 @@ The dashboard allows users to filter activities by type and date range, explore 
 
 | Name | GitHub | Role |
 |------|--------|------|
-| Nicole Salazar-Cuellar | [@nicolevasos](https://github.com/nicolevasos) | Project initialization, core package setup, dashboard layout design |
+| Nicole Salazar-Cuellar | [@nicolevasos](https://github.com/nicolevasos) | Project initialization, data retrieval from API, core package setup, dashboard layout design |
 | Angelica Maria Moreno | [@angelicarjs](https://github.com/Angelicarjs) | Statistics and geo-statistics, workout visualization, performance analytics |
 | Arunima Sen | [@arunima-sen](https://github.com/arunima-sen) | Hotspot analysis, Getis-Ord statistics, spatial insights through heatmaps |
 | Emese Gojdar | [@placcky](https://github.com/placcky) | Data preparation for dashboard visualization |
