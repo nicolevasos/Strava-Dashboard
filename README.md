@@ -4,7 +4,7 @@ A personalised web-app dashboard that leverages the Strava API to extract, analy
 This dashboard serves as both a motivational tool and a decision-making support system for fitness enthusiasts and athletes seeking data-driven training insights.
 
 ## View of the dashboard
-<img width="1600" height="788" alt="image" src="https://github.com/user-attachments/assets/1e457026-ade0-461f-9b08-5fec1d0ca2f4" />
+<img width="1600" height="788" alt="image" src="https://github.com/nicolevasos/Strava-Dashboard/blob/main/union/v1/assets/dashboard_view.png" />
 
 ## Data Extraction
 
