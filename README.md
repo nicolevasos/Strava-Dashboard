@@ -1,6 +1,6 @@
 # Strava Dashboard
 
-A personalized interactive dashboard built with Python Dash that visualizes Strava activity data in the browser. This interactive dashboard provides insights into workout patterns, performance metrics, and spatial activity distribution through heat maps and geospatial analysis.
+A personalized interactive dashboard built with **Python Dash** that visualizes Strava activity data in the browser. This web-based dashboard provides insights into workout patterns, performance metrics, and spatial activity distribution through heat maps and geospatial analysis.
 This dashboard serves as both a motivational tool and a decision-making support system for fitness enthusiasts and athletes seeking data-driven training insights.
 
 ## View of the dashboard
